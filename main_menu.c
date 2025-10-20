@@ -209,9 +209,9 @@ void slot_menu_draw(void)
   }
 
   // Button hints
-  char* hint_text = "BTN1: BACK BTN0:DELETE";
+  char* hint_text = "BTN1:BACK BTN0:DEL";
   text_x = (pGlib->pDisplayGeometry->xSize - (strlen(hint_text) * 6)) / 2;
-  GLIB_drawString(pGlib, hint_text, strlen(hint_text), text_x, 110, 0);
+  GLIB_drawString(pGlib, hint_text, strlen(hint_text), text_x, 120, 0);
 
   DMD_updateDisplay();
 }

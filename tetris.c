@@ -159,7 +159,7 @@ void tetris_resume_game(void)
 
 void tetris_save_game(void)
 {
-  if (current_game_state == GAME_STATE_IN_GAME) {
+  if (current_game_state == GAME_STATE_IN_GAME || current_game_state == GAME_STATE_PAUSED) {
     int slot_index = find_next_slot();
     tetris_save_to_slot(slot_index);
   }

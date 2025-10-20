@@ -103,6 +103,9 @@ void sl_button_on_change(const sl_button_t *handle)
       if (handle == &sl_button_btn1) {
         tetris_resume_game();
       }
+      if (handle == &sl_button_btn0) { // BTN0 is for saving
+        tetris_save_game();
+      }
   } else if (current_state == GAME_STATE_SLOT_SELECTION) {
       slot_menu_handle_input(JOYSTICK_NONE, handle);
   } else if (current_state == GAME_STATE_GAME_OVER) {
