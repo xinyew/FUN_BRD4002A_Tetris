@@ -36,6 +36,7 @@ component:
 - {id: device_init}
 - {id: dmd_memlcd}
 - {id: glib}
+- {id: joystick}
 - instance: [btn0, btn1]
   id: simple_button
 - {id: sl_main}

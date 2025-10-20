@@ -256,6 +256,7 @@
           <file name="em_emu.c" uri="studio:/sdk/platform/emlib/src/em_emu.c"/>
           <file name="em_eusart.c" uri="studio:/sdk/platform/emlib/src/em_eusart.c"/>
           <file name="em_gpio.c" uri="studio:/sdk/platform/emlib/src/em_gpio.c"/>
+          <file name="em_iadc.c" uri="studio:/sdk/platform/emlib/src/em_iadc.c"/>
           <file name="em_msc.c" uri="studio:/sdk/platform/emlib/src/em_msc.c"/>
           <file name="em_rtcc.c" uri="studio:/sdk/platform/emlib/src/em_rtcc.c"/>
           <file name="em_system.c" uri="studio:/sdk/platform/emlib/src/em_system.c"/>
@@ -279,6 +280,7 @@
           <file name="em_eusart.h" uri="studio:/sdk/platform/emlib/inc/em_eusart.h"/>
           <file name="em_eusart_compat.h" uri="studio:/sdk/platform/emlib/inc/em_eusart_compat.h"/>
           <file name="em_gpio.h" uri="studio:/sdk/platform/emlib/inc/em_gpio.h"/>
+          <file name="em_iadc.h" uri="studio:/sdk/platform/emlib/inc/em_iadc.h"/>
           <file name="em_msc.h" uri="studio:/sdk/platform/emlib/inc/em_msc.h"/>
           <file name="em_msc_compat.h" uri="studio:/sdk/platform/emlib/inc/em_msc_compat.h"/>
           <file name="em_rtcc.h" uri="studio:/sdk/platform/emlib/inc/em_rtcc.h"/>
@@ -319,6 +321,14 @@
             <file name="sl_cos.h" uri="studio:/sdk/hardware/driver/configuration_over_swo/inc/sl_cos.h"/>
           </folder>
         </folder>
+        <folder name="joystick">
+          <folder name="src">
+            <file name="sl_joystick.c" uri="studio:/sdk/hardware/driver/joystick/src/sl_joystick.c"/>
+          </folder>
+          <folder name="inc">
+            <file name="sl_joystick.h" uri="studio:/sdk/hardware/driver/joystick/inc/sl_joystick.h"/>
+          </folder>
+        </folder>
         <folder name="memlcd">
           <folder name="src">
             <folder name="ls013b7dh03">
@@ -352,11 +362,11 @@
       </folder>
     </folder>
   </folder>
-  <file name="app.c" linked="false" uri="studio:/sdk/app/common/example/memlcd_baremetal/app.c"/>
-  <file name="memlcd_app.c" linked="false" uri="studio:/sdk/app/common/example/memlcd_baremetal/memlcd_app.c"/>
-  <file name="app.h" linked="false" uri="studio:/sdk/app/common/example/memlcd_baremetal/app.h"/>
-  <file name="memlcd_app.h" linked="false" uri="studio:/sdk/app/common/example/memlcd_baremetal/memlcd_app.h"/>
-  <file name="readme.md" linked="false" uri="studio:/sdk/app/common/example/memlcd_baremetal/readme.md"/>
+  <file name="app.c" linked="false" uri="studio:/project/app.c"/>
+  <file name="memlcd_app.c" linked="false" uri="studio:/project/memlcd_app.c"/>
+  <file name="app.h" linked="false" uri="studio:/project/app.h"/>
+  <file name="memlcd_app.h" linked="false" uri="studio:/project/memlcd_app.h"/>
+  <file name="readme.md" linked="false" uri="studio:/project/readme.md"/>
   <file name="main.c" generated="true" linked="false"/>
   <includePath uri="studio:/project/"/>
   <includePath uri="studio:/sdk/platform/Device/SiliconLabs/EFR32MG27/Include"/>
@@ -379,6 +389,7 @@
   <includePath uri="studio:/sdk/platform/service/interrupt_manager/inc"/>
   <includePath uri="studio:/sdk/platform/service/interrupt_manager/src"/>
   <includePath uri="studio:/sdk/platform/service/interrupt_manager/inc/arm"/>
+  <includePath uri="studio:/sdk/hardware/driver/joystick/inc"/>
   <includePath uri="studio:/sdk/hardware/driver/memlcd/src/ls013b7dh03"/>
   <includePath uri="studio:/sdk/hardware/driver/memlcd/inc"/>
   <includePath uri="studio:/sdk/hardware/driver/memlcd/inc/memlcd_usart"/>

@@ -7,6 +7,7 @@ sl_core_config.h=-2018153270
 sl_debug_swo_config.h=1207363231
 sl_device_init_dcdc_config.h=-989090835
 sl_device_init_emu_config.h=1238190016
+sl_joystick_config.h=-2042997968
 sl_memlcd_usart_config.h=2138536033
 sl_memory_manager_region_config.h=990835082
 sl_mx25_flash_shutdown_eusart_config.h=-860100026

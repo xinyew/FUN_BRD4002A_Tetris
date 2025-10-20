@@ -176,6 +176,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_gpio.h</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emlib/inc/em_iadc.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_iadc.h</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/emlib/inc/em_msc.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_msc.h</locationURI>
@@ -256,6 +261,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_gpio.c</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emlib/src/em_iadc.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_iadc.c</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/emlib/src/em_msc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_msc.c</locationURI>
@@ -319,6 +329,16 @@
 			<name>simplicity_sdk_2025.6.2/hardware/driver/configuration_over_swo/src/sl_cos.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/hardware/driver/configuration_over_swo/src/sl_cos.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/hardware/driver/joystick/inc/sl_joystick.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/hardware/driver/joystick/inc/sl_joystick.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/hardware/driver/joystick/src/sl_joystick.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/hardware/driver/joystick/src/sl_joystick.c</locationURI>
 		</link>
 		<link>
 			<name>simplicity_sdk_2025.6.2/hardware/driver/memlcd/inc/sl_memlcd.h</name>

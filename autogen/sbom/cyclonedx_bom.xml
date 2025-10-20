@@ -10,7 +10,7 @@ referenced in this SBOM.)
 -->
 <bom xmlns="http://cyclonedx.org/schema/bom/1.6" version="1">
   <metadata>
-    <timestamp>2025-10-20T20:24:35Z</timestamp>
+    <timestamp>2025-10-20T21:11:35Z</timestamp>
     <authors>
       <author>
         <name>Silicon Laboratories, Inc.</name>
@@ -687,6 +687,26 @@ referenced in this SBOM.)
         </component>
         <component bom-ref="simplicity_sdk:2025.6.2:gpio" type="library">
           <name>GPIO Driver</name>
+          <version>2025.6.2</version>
+	      <supplier>
+	        <name>Silicon Laboratories, Inc.</name>
+	      </supplier>
+          <licenses>
+            <expression>Zlib</expression>
+          </licenses>
+        </component>
+        <component bom-ref="simplicity_sdk:2025.6.2:joystick" type="library">
+          <name>Joystick</name>
+          <version>2025.6.2</version>
+	      <supplier>
+	        <name>Silicon Laboratories, Inc.</name>
+	      </supplier>
+          <licenses>
+            <expression>Zlib</expression>
+          </licenses>
+        </component>
+        <component bom-ref="simplicity_sdk:2025.6.2:emlib_iadc" type="library">
+          <name>IADC</name>
           <version>2025.6.2</version>
 	      <supplier>
 	        <name>Silicon Laboratories, Inc.</name>

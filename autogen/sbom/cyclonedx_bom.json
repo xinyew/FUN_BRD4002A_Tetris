@@ -3,7 +3,7 @@
   "specVersion" : "1.6",
   "version" : 1,
   "metadata" : {
-    "timestamp" : "2025-10-20T20:24:35Z",
+    "timestamp" : "2025-10-20T21:11:35Z",
     "authors" : [ {
       "name" : "Silicon Laboratories, Inc."
     } ],
@@ -814,6 +814,30 @@
       "type" : "library",
       "bom-ref" : "simplicity_sdk:2025.6.2:gpio",
       "name" : "GPIO Driver",
+      "version" : "2025.6.2",
+      "supplier" : {
+        "name" : "Silicon Laboratories, Inc."
+      },
+      "licenses" : [ {
+        "expression" : "Zlib"
+      } ]
+    }, {
+      "scope" : "required",
+      "type" : "library",
+      "bom-ref" : "simplicity_sdk:2025.6.2:joystick",
+      "name" : "Joystick",
+      "version" : "2025.6.2",
+      "supplier" : {
+        "name" : "Silicon Laboratories, Inc."
+      },
+      "licenses" : [ {
+        "expression" : "Zlib"
+      } ]
+    }, {
+      "scope" : "required",
+      "type" : "library",
+      "bom-ref" : "simplicity_sdk:2025.6.2:emlib_iadc",
+      "name" : "IADC",
       "version" : "2025.6.2",
       "supplier" : {
         "name" : "Silicon Laboratories, Inc."
