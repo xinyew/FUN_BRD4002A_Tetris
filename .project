@@ -61,6 +61,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/common/inc/sl_atomic.h</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/common/inc/sl_bit.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/common/inc/sl_bit.h</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/common/inc/sl_code_classification.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/common/inc/sl_code_classification.h</locationURI>
@@ -426,6 +431,111 @@
 			<locationURI>STUDIO_SDK_LOC/platform/driver/gpio/src/sl_gpio.c</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/common/inc/ecode.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/common/inc/ecode.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/config/nvm3_config.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/config/nvm3_config.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_cache.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_cache.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_default.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_default.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_generic.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_generic.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_hal.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_hal.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_hal_flash.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_hal_flash.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_lock.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_lock.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_object.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_object.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_page.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_page.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_trace.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_trace.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/inc/nvm3_utils.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/inc/nvm3_utils.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_cache.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_cache.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_default_common_linker.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_default_common_linker.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_hal_flash.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_hal_flash.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_lock.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_lock.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_object.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_object.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_page.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_page.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/emdrv/nvm3/src/nvm3_utils.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/nvm3/src/nvm3_utils.c</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/middleware/glib/dmd/dmd.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/middleware/glib/dmd/dmd.h</locationURI>
@@ -631,14 +741,59 @@
 			<locationURI>STUDIO_SDK_LOC/platform/service/interrupt_manager/src/sli_interrupt_manager.h</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/inc/sl_memory_manager.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/inc/sl_memory_manager.h</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/inc/sl_memory_manager_region.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/inc/sl_memory_manager_region.h</locationURI>
 		</link>
 		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/inc/sli_memory_manager_retention_control.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/inc/sli_memory_manager_retention_control.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager_dynamic_reservation.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager_dynamic_reservation.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager_pool.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager_pool.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager_pool_common.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager_pool_common.c</locationURI>
+		</link>
+		<link>
 			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager_region.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager_region.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sl_memory_manager_retarget.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sl_memory_manager_retarget.c</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sli_memory_manager.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sli_memory_manager.h</locationURI>
+		</link>
+		<link>
+			<name>simplicity_sdk_2025.6.2/platform/service/memory_manager/src/sli_memory_manager_common.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/service/memory_manager/src/sli_memory_manager_common.c</locationURI>
 		</link>
 		<link>
 			<name>simplicity_sdk_2025.6.2/platform/service/sl_main/inc/sl_main_init.h</name>

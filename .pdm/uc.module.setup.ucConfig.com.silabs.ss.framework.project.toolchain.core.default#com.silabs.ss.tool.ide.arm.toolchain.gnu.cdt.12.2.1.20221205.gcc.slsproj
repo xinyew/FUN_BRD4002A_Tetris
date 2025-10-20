@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="uc.module.setup.ucConfig.com.silabs.ss.framework.project.toolchain.core.default#com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:12.2.1.20221205.gcc" propertyScope="project">
   <folder name="config">
-    <file name="sl_memory_manager_region_config.h" generated="true" linked="false"/>
     <file name="sl_board_control_config.h" generated="true" linked="false"/>
     <file name="sl_clock_manager_oscillator_config.h" generated="true" linked="false"/>
     <file name="sl_clock_manager_tree_config.h" generated="true" linked="false"/>
@@ -17,6 +16,9 @@
     <file name="sl_simple_button_config.h" generated="true" linked="false"/>
     <file name="sl_sleeptimer_config.h" generated="true" linked="false"/>
     <file name="sl_joystick_config.h" generated="true" linked="false"/>
+    <file name="nvm3_default_config.h" generated="true" linked="false"/>
+    <file name="sl_memory_manager_region_config.h" generated="true" linked="false"/>
+    <file name="sl_memory_manager_config.h" generated="true" linked="false"/>
   </folder>
   <includePath uri="studio:/project/config"/>
 </project>

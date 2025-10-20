@@ -33,6 +33,10 @@ void tetris_set_game_state(game_state_t new_state);
 void tetris_start_new_game(int starting_level);
 void tetris_pause_game(void);
 void tetris_resume_game(void);
+void tetris_save_game(void);
+void tetris_load_game(void);
+bool tetris_has_saved_game(void);
+void tetris_process_action(void);
 GLIB_Context_t* tetris_get_glib_context(void);
 
 #endif // TETRIS_H

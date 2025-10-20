@@ -6,6 +6,7 @@
 #include "sl_debug_swo.h"
 #include "sl_gpio.h"
 #include "sl_simple_button_instances.h"
+#include "nvm3_default.h"
 #include "sl_cos.h"
 
 void sli_driver_permanent_allocation(void)
@@ -29,6 +30,7 @@ void sl_platform_init(void)
   sl_board_preinit();
   sl_clock_manager_runtime_init();
   sl_board_init();
+  nvm3_initDefault();
 }
 
 void sli_internal_init_early(void)

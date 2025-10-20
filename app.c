@@ -40,6 +40,7 @@ void app_init(void)
 // This is called on every iteration of the main while loop
 void app_process_action(void)
 {
+  tetris_process_action();
   game_state_t current_state = tetris_get_game_state();
 
   // --- Handle Input ---
@@ -86,6 +87,9 @@ void sl_button_on_change(const sl_button_t *handle)
   } else if (current_state == GAME_STATE_IN_GAME) {
       if (handle == &sl_button_btn1) {
         tetris_pause_game();
+      }
+      if (handle == &sl_button_btn0) { // BTN0 is for saving
+        tetris_save_game();
       }
   } else if (current_state == GAME_STATE_PAUSED) {
       if (handle == &sl_button_btn1) {

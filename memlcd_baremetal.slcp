@@ -37,6 +37,7 @@ component:
 - {id: dmd_memlcd}
 - {id: glib}
 - {id: joystick}
+- {id: nvm3_source}
 - instance: [btn0, btn1]
   id: simple_button
 - {id: sl_main}

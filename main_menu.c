@@ -7,8 +7,12 @@
 // --- Module state ---
 static int selected_option = 0;
 static int start_level = 1;
-static const char* menu_options[] = {"Start Game", "Adjust Level"};
-static const int num_menu_options = 2;
+
+static const char* menu_options_no_load[] = {"Start Game", "Adjust Level"};
+static const char* menu_options_with_load[] = {"Start Game", "Adjust Level", "Load Game"};
+static const char** menu_options;
+static int num_menu_options;
+
 
 // --- Local Functions ---
 static void draw_title(GLIB_Context_t *pGlib);
@@ -20,6 +24,13 @@ void main_menu_init(void)
 {
   selected_option = 0;
   start_level = 1;
+  if (tetris_has_saved_game()) {
+    menu_options = menu_options_with_load;
+    num_menu_options = 3;
+  } else {
+    menu_options = menu_options_no_load;
+    num_menu_options = 2;
+  }
 }
 
 int main_menu_get_start_level(void)
@@ -37,7 +48,7 @@ void main_menu_draw(void)
   draw_title(pGlib);
 
   // 2. Draw a semi-transparent overlay for the menu options
-  GLIB_Rectangle_t rect = { .xMin = 10, .yMin = 55, .xMax = 118, .yMax = 95 };
+  GLIB_Rectangle_t rect = { .xMin = 10, .yMin = 55, .xMax = 118, .yMax = 110 };
   pGlib->foregroundColor = White;
   GLIB_drawRectFilled(pGlib, &rect);
   pGlib->foregroundColor = Black;
@@ -90,6 +101,8 @@ void main_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button
   if (joystick_pos == JOYSTICK_C) { // Center click
     if (selected_option == 0) { // Start Game
       tetris_start_new_game(start_level);
+    } else if (selected_option == 2) { // Load Game
+      tetris_load_game();
     }
   }
 

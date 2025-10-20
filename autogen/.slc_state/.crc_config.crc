@@ -1,5 +1,6 @@
 #CRC Codes for initially generated config files -- do not modify!
 glib_config.h=1320220439
+nvm3_default_config.h=-1865878923
 sl_board_control_config.h=763402104
 sl_clock_manager_oscillator_config.h=-1813682934
 sl_clock_manager_tree_config.h=-1082693966
@@ -9,6 +10,7 @@ sl_device_init_dcdc_config.h=-989090835
 sl_device_init_emu_config.h=1238190016
 sl_joystick_config.h=-2042997968
 sl_memlcd_usart_config.h=2138536033
+sl_memory_manager_config.h=-209387538
 sl_memory_manager_region_config.h=990835082
 sl_mx25_flash_shutdown_eusart_config.h=-860100026
 sl_simple_button_btn0_config.h=-1097312540

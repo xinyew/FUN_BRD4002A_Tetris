@@ -60,6 +60,7 @@
       <folder name="common">
         <folder name="inc">
           <file name="sl_atomic.h" uri="studio:/sdk/platform/common/inc/sl_atomic.h"/>
+          <file name="sl_bit.h" uri="studio:/sdk/platform/common/inc/sl_bit.h"/>
           <file name="sl_code_classification.h" uri="studio:/sdk/platform/common/inc/sl_code_classification.h"/>
           <file name="sli_code_classification.h" uri="studio:/sdk/platform/common/inc/sli_code_classification.h"/>
           <file name="sl_enum.h" uri="studio:/sdk/platform/common/inc/sl_enum.h"/>
@@ -163,10 +164,19 @@
         </folder>
         <folder name="memory_manager">
           <folder name="src">
+            <file name="sl_memory_manager.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager.c"/>
+            <file name="sl_memory_manager_dynamic_reservation.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager_dynamic_reservation.c"/>
+            <file name="sli_memory_manager_common.c" uri="studio:/sdk/platform/service/memory_manager/src/sli_memory_manager_common.c"/>
+            <file name="sl_memory_manager_retarget.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager_retarget.c"/>
+            <file name="sli_memory_manager.h" uri="studio:/sdk/platform/service/memory_manager/src/sli_memory_manager.h"/>
+            <file name="sl_memory_manager_pool_common.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager_pool_common.c"/>
+            <file name="sl_memory_manager_pool.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager_pool.c"/>
             <file name="sl_memory_manager_region.c" uri="studio:/sdk/platform/service/memory_manager/src/sl_memory_manager_region.c"/>
           </folder>
           <folder name="inc">
+            <file name="sl_memory_manager.h" uri="studio:/sdk/platform/service/memory_manager/inc/sl_memory_manager.h"/>
             <file name="sl_memory_manager_region.h" uri="studio:/sdk/platform/service/memory_manager/inc/sl_memory_manager_region.h"/>
+            <file name="sli_memory_manager_retention_control.h" uri="studio:/sdk/platform/service/memory_manager/inc/sli_memory_manager_retention_control.h"/>
           </folder>
         </folder>
         <folder name="sl_main">
@@ -247,6 +257,41 @@
           <file name="em_types.h" uri="studio:/sdk/platform/middleware/glib/em_types.h"/>
           <file name="bmp_conf.h" uri="studio:/sdk/platform/middleware/glib/bmp_conf.h"/>
           <file name="bpmfont.h" uri="studio:/sdk/platform/middleware/glib/bpmfont.h"/>
+        </folder>
+      </folder>
+      <folder name="emdrv">
+        <folder name="common">
+          <folder name="inc">
+            <file name="ecode.h" uri="studio:/sdk/platform/emdrv/common/inc/ecode.h"/>
+          </folder>
+        </folder>
+        <folder name="nvm3">
+          <folder name="inc">
+            <file name="nvm3_default.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_default.h"/>
+            <file name="nvm3.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3.h"/>
+            <file name="nvm3_generic.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_generic.h"/>
+            <file name="nvm3_cache.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_cache.h"/>
+            <file name="nvm3_hal.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_hal.h"/>
+            <file name="nvm3_hal_flash.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_hal_flash.h"/>
+            <file name="nvm3_lock.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_lock.h"/>
+            <file name="nvm3_object.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_object.h"/>
+            <file name="nvm3_page.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_page.h"/>
+            <file name="nvm3_trace.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_trace.h"/>
+            <file name="nvm3_utils.h" uri="studio:/sdk/platform/emdrv/nvm3/inc/nvm3_utils.h"/>
+          </folder>
+          <folder name="src">
+            <file name="nvm3_default_common_linker.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_default_common_linker.c"/>
+            <file name="nvm3.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3.c"/>
+            <file name="nvm3_cache.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_cache.c"/>
+            <file name="nvm3_hal_flash.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_hal_flash.c"/>
+            <file name="nvm3_lock.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_lock.c"/>
+            <file name="nvm3_object.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_object.c"/>
+            <file name="nvm3_page.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_page.c"/>
+            <file name="nvm3_utils.c" uri="studio:/sdk/platform/emdrv/nvm3/src/nvm3_utils.c"/>
+          </folder>
+          <folder name="config">
+            <file name="nvm3_config.h" uri="studio:/sdk/platform/emdrv/nvm3/config/nvm3_config.h"/>
+          </folder>
         </folder>
       </folder>
       <folder name="emlib">
@@ -382,6 +427,7 @@
   <includePath uri="studio:/sdk/platform/service/device_init/inc"/>
   <includePath uri="studio:/sdk/platform/middleware/glib/dmd"/>
   <includePath uri="studio:/sdk/platform/middleware/glib"/>
+  <includePath uri="studio:/sdk/platform/emdrv/common/inc"/>
   <includePath uri="studio:/sdk/platform/emlib/inc"/>
   <includePath uri="studio:/sdk/platform/middleware/glib/glib"/>
   <includePath uri="studio:/sdk/platform/driver/gpio/inc"/>
@@ -394,7 +440,10 @@
   <includePath uri="studio:/sdk/hardware/driver/memlcd/inc"/>
   <includePath uri="studio:/sdk/hardware/driver/memlcd/inc/memlcd_usart"/>
   <includePath uri="studio:/sdk/platform/service/memory_manager/inc"/>
+  <includePath uri="studio:/sdk/platform/service/memory_manager/src"/>
   <includePath uri="studio:/sdk/hardware/driver/mx25_flash_shutdown/inc/sl_mx25_flash_shutdown_eusart"/>
+  <includePath uri="studio:/sdk/platform/emdrv/nvm3/inc"/>
+  <includePath uri="studio:/sdk/platform/emdrv/nvm3/config"/>
   <includePath uri="studio:/sdk/platform/service/sl_main/inc"/>
   <includePath uri="studio:/sdk/platform/service/sl_main/src"/>
   <includePath uri="studio:/sdk/platform/service/sleeptimer/inc"/>
@@ -486,13 +535,27 @@
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.map" value="true"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.linker.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.linker.map" value="true"/>
   <toolOption toolId="studio.ide.project" optionId="device_opn" value="efr32mg27c140f768im40"/>
+  <toolOption toolId="makefile.arm.gcc.linker" optionId="misc">
+    <toolListOption value="-Wl,--wrap=_free_r -Wl,--wrap=_malloc_r -Wl,--wrap=_calloc_r -Wl,--wrap=_realloc_r"/>
+    <toolListOption value="-fno-lto"/>
+    <toolListOption value="-Wl,--gc-sections"/>
+  </toolOption>
+  <toolOption toolId="makefile.host.gcc.linker" optionId="misc">
+    <toolListOption value="-Wl,--wrap=_free_r -Wl,--wrap=_malloc_r -Wl,--wrap=_calloc_r -Wl,--wrap=_realloc_r"/>
+  </toolOption>
+  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base" optionId="com.silabs.gnu.c.link.option.ldflags">
+    <toolListOption value="-Wl,--wrap=_free_r -Wl,--wrap=_malloc_r -Wl,--wrap=_calloc_r -Wl,--wrap=_realloc_r"/>
+    <toolListOption value="-fno-lto"/>
+    <toolListOption value="-Wl,--no-warn-rwx-segments"/>
+  </toolOption>
+  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.linker.base" optionId="com.silabs.gnu.cpp.link.option.flags">
+    <toolListOption value="-Wl,--wrap=_free_r -Wl,--wrap=_malloc_r -Wl,--wrap=_calloc_r -Wl,--wrap=_realloc_r"/>
+    <toolListOption value="-fno-lto"/>
+    <toolListOption value="-Wl,--no-warn-rwx-segments"/>
+  </toolOption>
   <toolOption toolId="makefile.arm.gcc.compiler" optionId="misc">
     <toolListOption value="-fno-lto"/>
     <toolListOption value="--specs=nano.specs"/>
-  </toolOption>
-  <toolOption toolId="makefile.arm.gcc.linker" optionId="misc">
-    <toolListOption value="-fno-lto"/>
-    <toolListOption value="-Wl,--gc-sections"/>
   </toolOption>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.gnu.c.compiler.option.misc.otherlist">
     <toolListOption value="-fno-lto"/>
@@ -505,14 +568,6 @@
     <toolListOption value="--specs=nano.specs"/>
     <toolListOption value="-c"/>
     <toolListOption value="-fmessage-length=0"/>
-  </toolOption>
-  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.linker.base" optionId="com.silabs.gnu.cpp.link.option.flags">
-    <toolListOption value="-fno-lto"/>
-    <toolListOption value="-Wl,--no-warn-rwx-segments"/>
-  </toolOption>
-  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.linker.base" optionId="com.silabs.gnu.c.link.option.ldflags">
-    <toolListOption value="-fno-lto"/>
-    <toolListOption value="-Wl,--no-warn-rwx-segments"/>
   </toolOption>
   <toolOption toolId="makefile.host.gcc.compiler" optionId="misc">
     <toolListOption value="--specs=nano.specs"/>
