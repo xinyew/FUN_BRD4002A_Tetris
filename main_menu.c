@@ -45,7 +45,7 @@ void main_menu_draw(void)
   GLIB_clear(pGlib);
 
   // 1. Draw the decorative background
-  draw_background_blocks(pGlib);
+  // draw_background_blocks(pGlib);
   draw_title(pGlib);
 
   // 2. Draw a semi-transparent overlay for the menu options
