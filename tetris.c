@@ -1,25 +1,36 @@
 #include "tetris.h"
 #include "glib.h"
-//#include "memlcd.h"
-#include "sl_board_control.h"
 #include "sl_sleeptimer.h"
 #include <string.h>
 #include <stdlib.h>
-
 #include <stdio.h>
 
+// Game State
+static game_state_t current_game_state;
+
+// Graphics
 static GLIB_Context_t glibContext;
 
+// Game variables
 static int board[BOARD_WIDTH][BOARD_HEIGHT];
 static Tetromino current_tetromino;
 static Tetromino next_tetromino;
 static Point current_position;
-static bool game_over;
 static int lines_cleared;
 static int level;
 static int score;
 
+// Timer
 static sl_sleeptimer_timer_handle_t tetris_timer;
+
+// --- Local function prototypes ---
+static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *data);
+static Tetromino get_random_tetromino(void);
+static void spawn_new_tetromino(void);
+static bool check_collision(Point pos, Tetromino tet);
+static void merge_tetromino(void);
+static void clear_lines(void);
+static void tetris_set_game_speed(void);
 
 static const Tetromino tetrominoes[] = {
     // I
@@ -38,111 +49,75 @@ static const Tetromino tetrominoes[] = {
     { { {-1, 0}, {0, 0}, {0, 1}, {1, 1} }, 7 }
 };
 
-static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *data);
-static Tetromino get_random_tetromino(void);
-static void spawn_new_tetromino(void);
-static bool check_collision(Point pos, Tetromino tet);
-static void merge_tetromino(void);
-static void clear_lines(void);
+// --- Public functions ---
 
 void tetris_init(void)
 {
   GLIB_contextInit(&glibContext);
   glibContext.backgroundColor = White;
   glibContext.foregroundColor = Black;
-  GLIB_clear(&glibContext);
-  GLIB_setFont(&glibContext, (GLIB_Font_t *) &GLIB_FontNormal8x8);
-
-  memset(board, 0, sizeof(board));
-  game_over = false;
-  lines_cleared = 0;
-  level = 1;
-  score = 0;
-
-  next_tetromino = get_random_tetromino();
-  spawn_new_tetromino();
-
-  sl_sleeptimer_start_periodic_timer_ms(&tetris_timer,
-                                        500,
-                                        tetris_timer_callback,
-                                        NULL,
-                                        0,
-                                        0);
-}
-
-void tetris_update(void)
-{
-    if (game_over) {
-        return;
-    }
-
-    Point next_pos = current_position;
-    next_pos.y++;
-
-    if (check_collision(next_pos, current_tetromino)) {
-        merge_tetromino();
-        clear_lines();
-        spawn_new_tetromino();
-        if (check_collision(current_position, current_tetromino)) {
-            game_over = true;
-        }
-    } else {
-        current_position = next_pos;
-    }
-    tetris_draw_board();
-}
-
-void tetris_move_left(void)
-{
-    if (game_over) return;
-    Point next_pos = current_position;
-    next_pos.x--;
-    if (!check_collision(next_pos, current_tetromino)) {
-        current_position = next_pos;
-    }
-    tetris_draw_board();
-}
-
-void tetris_move_right(void)
-{
-    if (game_over) return;
-    Point next_pos = current_position;
-    next_pos.x++;
-    if (!check_collision(next_pos, current_tetromino)) {
-        current_position = next_pos;
-    }
-    tetris_draw_board();
-}
-
-void tetris_move_down(void)
-{
-  if (game_over) return;
-  tetris_update();
-}
-
-void tetris_rotate(void)
-{
-    if (game_over || current_tetromino.color == 2) { // Do not rotate 'O' piece
-      return;
-    }
-
-    Tetromino rotated = current_tetromino;
-    for (int i = 0; i < 4; i++) {
-        int x = rotated.blocks[i].x;
-        rotated.blocks[i].x = -rotated.blocks[i].y;
-        rotated.blocks[i].y = x;
-    }
-
-    if (!check_collision(current_position, rotated)) {
-        current_tetromino = rotated;
-    }
-    tetris_draw_board();
-}
-
-void tetris_draw_board(void)
-{
-    GLIB_clear(&glibContext);
-
+    GLIB_setFont(&glibContext, (GLIB_Font_t *) &GLIB_FontNarrow6x8);
+    current_game_state = GAME_STATE_MAIN_MENU;
+  }
+  
+  void tetris_start_new_game(int starting_level)
+  {
+    memset(board, 0, sizeof(board));
+    lines_cleared = 0;
+    level = starting_level;
+    score = 0;
+  
+    next_tetromino = get_random_tetromino();
+    spawn_new_tetromino();
+  
+    tetris_set_game_speed(); // Set initial speed based on level
+  
+    current_game_state = GAME_STATE_IN_GAME;
+  }
+  
+  void tetris_update(void)
+  {
+      if (current_game_state != GAME_STATE_IN_GAME) {
+          return;
+      }
+  
+      Point next_pos = current_position;
+      next_pos.y++;
+  
+      if (check_collision(next_pos, current_tetromino)) {
+          merge_tetromino();
+          clear_lines();
+          spawn_new_tetromino();
+          if (check_collision(current_position, current_tetromino)) {
+              sl_sleeptimer_stop_timer(&tetris_timer);
+              current_game_state = GAME_STATE_GAME_OVER;
+          }
+      } else {
+          current_position = next_pos;
+      }
+      tetris_draw_board();
+  }
+  
+  void tetris_draw_board(void)
+  {
+      GLIB_clear(&glibContext);
+  
+      if (current_game_state == GAME_STATE_GAME_OVER) {
+          char* game_over_text = "GAME OVER";
+          int text_x = (glibContext.pDisplayGeometry->xSize - (strlen(game_over_text) * 6)) / 2;
+          GLIB_drawString(&glibContext, game_over_text, strlen(game_over_text), text_x, 40, 0);
+  
+          char score_buffer[16];
+          snprintf(score_buffer, sizeof(score_buffer), "Score: %d", score);
+          text_x = (glibContext.pDisplayGeometry->xSize - (strlen(score_buffer) * 6)) / 2;
+          GLIB_drawString(&glibContext, score_buffer, strlen(score_buffer), text_x, 60, 0);
+  
+          char* restart_text = "Press BTN1";
+          text_x = (glibContext.pDisplayGeometry->xSize - (strlen(restart_text) * 6)) / 2;
+          GLIB_drawString(&glibContext, restart_text, strlen(restart_text), text_x, 80, 0);
+          DMD_updateDisplay();
+          return;
+      }
     // Draw board border
     GLIB_Rectangle_t rect = { .xMin = 0, .yMin = 0, .xMax = BOARD_WIDTH * BLOCK_SIZE + 1, .yMax = BOARD_HEIGHT * BLOCK_SIZE + 1 };
     GLIB_drawRect(&glibContext, &rect);
@@ -204,12 +179,75 @@ void tetris_draw_board(void)
         GLIB_drawRectFilled(&glibContext, &rect);
     }
 
-    if (game_over) {
-        GLIB_drawString(&glibContext, "GAME OVER", 9, 5, 60, 0);
-    }
-
     DMD_updateDisplay();
 }
+
+// --- State Management Functions ---
+game_state_t tetris_get_game_state(void)
+{
+  return current_game_state;
+}
+
+void tetris_set_game_state(game_state_t new_state)
+{
+  current_game_state = new_state;
+}
+
+GLIB_Context_t* tetris_get_glib_context(void)
+{
+  return &glibContext;
+}
+
+// --- Game Logic Functions ---
+
+void tetris_move_left(void)
+{
+    if (current_game_state != GAME_STATE_IN_GAME) return;
+    Point next_pos = current_position;
+    next_pos.x--;
+    if (!check_collision(next_pos, current_tetromino)) {
+        current_position = next_pos;
+    }
+    tetris_draw_board();
+}
+
+void tetris_move_right(void)
+{
+    if (current_game_state != GAME_STATE_IN_GAME) return;
+    Point next_pos = current_position;
+    next_pos.x++;
+    if (!check_collision(next_pos, current_tetromino)) {
+        current_position = next_pos;
+    }
+    tetris_draw_board();
+}
+
+void tetris_move_down(void)
+{
+  if (current_game_state != GAME_STATE_IN_GAME) return;
+  tetris_update();
+}
+
+void tetris_rotate(void)
+{
+    if (current_game_state != GAME_STATE_IN_GAME || current_tetromino.color == 2) { // Do not rotate 'O' piece
+      return;
+    }
+
+    Tetromino rotated = current_tetromino;
+    for (int i = 0; i < 4; i++) {
+        int x = rotated.blocks[i].x;
+        rotated.blocks[i].x = -rotated.blocks[i].y;
+        rotated.blocks[i].y = x;
+    }
+
+    if (!check_collision(current_position, rotated)) {
+        current_tetromino = rotated;
+    }
+    tetris_draw_board();
+}
+
+// --- Internal Helper Functions ---
 
 static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *data)
 {
@@ -259,23 +297,19 @@ static void merge_tetromino(void)
     }
 }
 
-static void update_level_and_speed(void)
+static void tetris_set_game_speed(void)
 {
-  int new_level = (lines_cleared / 10) + 1;
-  if (new_level > level) {
-    level = new_level;
-    int new_speed = 500 - (level * 50);
-    if (new_speed < 50) {
-      new_speed = 50;
-    }
-    sl_sleeptimer_stop_timer(&tetris_timer);
-    sl_sleeptimer_start_periodic_timer_ms(&tetris_timer,
-                                          new_speed,
-                                          tetris_timer_callback,
-                                          NULL,
-                                          0,
-                                          0);
+  int new_speed = 500 - ((level - 1) * 50);
+  if (new_speed < 50) {
+    new_speed = 50;
   }
+  sl_sleeptimer_stop_timer(&tetris_timer);
+  sl_sleeptimer_start_periodic_timer_ms(&tetris_timer,
+                                        new_speed,
+                                        tetris_timer_callback,
+                                        NULL,
+                                        0,
+                                        0);
 }
 
 static void clear_lines(void)
@@ -319,6 +353,10 @@ static void clear_lines(void)
           score += 800 * level;
           break;
       }
-      update_level_and_speed();
+      int new_level = (lines_cleared / 10) + 1;
+      if (new_level > level) {
+        level = new_level;
+        tetris_set_game_speed();
+      }
     }
 }

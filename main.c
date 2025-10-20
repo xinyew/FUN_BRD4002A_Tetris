@@ -60,8 +60,7 @@ int main(void)
     // must be called from the super loop.
     sl_main_process_action();
 
-    // Poll the joystick
-    app_poll_joystick();
+    app_process_action();
 
 
 
