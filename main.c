@@ -59,8 +59,7 @@ int main(void)
     // must be called from the super loop.
     sl_main_process_action();
 
-    // User provided code. Application process.
-    app_process_action();
+
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.

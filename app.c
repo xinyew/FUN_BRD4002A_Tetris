@@ -14,20 +14,43 @@
  * sections of the MSLA applicable to Source Code.
  *
  ******************************************************************************/
-#include "memlcd_app.h"
+#include "app.h"
+#include "tetris.h"
+#include "sl_simple_button_instances.h"
+#include "sl_board_control.h"
+#include "sl_assert.h"
+#include "dmd.h"
 
-/***************************************************************************//**
- * Initialize application.
- ******************************************************************************/
+#ifndef BUTTON_INSTANCE_0
+#define BUTTON_INSTANCE_0   sl_button_btn0
+#endif
+
+#ifndef BUTTON_INSTANCE_1
+#define BUTTON_INSTANCE_1   sl_button_btn1
+#endif
+
 void app_init(void)
 {
-  memlcd_app_init();
+  uint32_t status;
+
+  /* Enable the memory lcd */
+  status = sl_board_enable_display();
+  EFM_ASSERT(status == SL_STATUS_OK);
+
+  /* Initialize the DMD support for memory lcd display */
+  status = DMD_init(0);
+  EFM_ASSERT(status == DMD_OK);
+
+  tetris_init();
 }
 
-/***************************************************************************//**
- * App ticking function.
- ******************************************************************************/
-void app_process_action(void)
+void sl_button_on_change(const sl_button_t *handle)
 {
-  memlcd_app_process_action();
+  if (sl_button_get_state(handle) == SL_SIMPLE_BUTTON_PRESSED) {
+    if (&BUTTON_INSTANCE_0 == handle) {
+      tetris_move_left();
+    } else if (&BUTTON_INSTANCE_1 == handle) {
+      tetris_move_right();
+    }
+  }
 }
