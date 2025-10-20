@@ -6,12 +6,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <stdio.h>
+
 static GLIB_Context_t glibContext;
 
 static int board[BOARD_WIDTH][BOARD_HEIGHT];
 static Tetromino current_tetromino;
+static Tetromino next_tetromino;
 static Point current_position;
 static bool game_over;
+static int lines_cleared;
+static int level;
+static int score;
 
 static sl_sleeptimer_timer_handle_t tetris_timer;
 
@@ -33,6 +39,7 @@ static const Tetromino tetrominoes[] = {
 };
 
 static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *data);
+static Tetromino get_random_tetromino(void);
 static void spawn_new_tetromino(void);
 static bool check_collision(Point pos, Tetromino tet);
 static void merge_tetromino(void);
@@ -40,7 +47,7 @@ static void clear_lines(void);
 
 void tetris_init(void)
 {
-    GLIB_contextInit(&glibContext);
+  GLIB_contextInit(&glibContext);
   glibContext.backgroundColor = White;
   glibContext.foregroundColor = Black;
   GLIB_clear(&glibContext);
@@ -48,6 +55,11 @@ void tetris_init(void)
 
   memset(board, 0, sizeof(board));
   game_over = false;
+  lines_cleared = 0;
+  level = 1;
+  score = 0;
+
+  next_tetromino = get_random_tetromino();
   spawn_new_tetromino();
 
   sl_sleeptimer_start_periodic_timer_ms(&tetris_timer,
@@ -142,15 +154,48 @@ void tetris_draw_board(void)
     for (int i = 0; i < 4; i++) {
         int x = current_position.x + current_tetromino.blocks[i].x;
         int y = current_position.y + current_tetromino.blocks[i].y;
-        rect.xMin = x * BLOCK_SIZE + 1;
-        rect.yMin = y * BLOCK_SIZE + 1;
-        rect.xMax = rect.xMin + BLOCK_SIZE - 1;
-        rect.yMax = rect.yMin + BLOCK_SIZE - 1;
+        if (y >= 0) {
+          rect.xMin = x * BLOCK_SIZE + 1;
+          rect.yMin = y * BLOCK_SIZE + 1;
+          rect.xMax = rect.xMin + BLOCK_SIZE - 1;
+          rect.yMax = rect.yMin + BLOCK_SIZE - 1;
+          GLIB_drawRectFilled(&glibContext, &rect);
+        }
+    }
+
+    // --- Draw Side Panel ---
+    char text_buffer[10];
+    int right_panel_x = (BOARD_WIDTH * BLOCK_SIZE) + 10;
+
+    // Score
+    GLIB_drawString(&glibContext, "Score", 5, right_panel_x, 10, 0);
+    snprintf(text_buffer, sizeof(text_buffer), "%d", score);
+    GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 20, 0);
+
+    // Lines
+    GLIB_drawString(&glibContext, "Lines", 5, right_panel_x, 40, 0);
+    snprintf(text_buffer, sizeof(text_buffer), "%d", lines_cleared);
+    GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 50, 0);
+
+    // Level
+    GLIB_drawString(&glibContext, "Level", 5, right_panel_x, 70, 0);
+    snprintf(text_buffer, sizeof(text_buffer), "%d", level);
+    GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 80, 0);
+
+    // Next Piece
+    GLIB_drawString(&glibContext, "Next", 4, right_panel_x, 100, 0);
+    for (int i = 0; i < 4; i++) {
+        int x = right_panel_x + 10 + (next_tetromino.blocks[i].x * BLOCK_SIZE);
+        int y = 110 + (next_tetromino.blocks[i].y * BLOCK_SIZE);
+        rect.xMin = x;
+        rect.yMin = y;
+        rect.xMax = x + BLOCK_SIZE - 1;
+        rect.yMax = y + BLOCK_SIZE - 1;
         GLIB_drawRectFilled(&glibContext, &rect);
     }
 
     if (game_over) {
-        GLIB_drawString(&glibContext, "GAME OVER", 9, 50, 60, 0);
+        GLIB_drawString(&glibContext, "GAME OVER", 9, 5, 60, 0);
     }
 
     DMD_updateDisplay();
@@ -163,9 +208,15 @@ static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *da
     tetris_update();
 }
 
+static Tetromino get_random_tetromino(void)
+{
+    return tetrominoes[rand() % (sizeof(tetrominoes) / sizeof(Tetromino))];
+}
+
 static void spawn_new_tetromino(void)
 {
-    current_tetromino = tetrominoes[rand() % (sizeof(tetrominoes) / sizeof(Tetromino))];
+    current_tetromino = next_tetromino;
+    next_tetromino = get_random_tetromino();
     current_position.x = BOARD_WIDTH / 2 - 1;
     current_position.y = 0;
 }
@@ -198,8 +249,28 @@ static void merge_tetromino(void)
     }
 }
 
+static void update_level_and_speed(void)
+{
+  int new_level = (lines_cleared / 10) + 1;
+  if (new_level > level) {
+    level = new_level;
+    int new_speed = 500 - (level * 50);
+    if (new_speed < 50) {
+      new_speed = 50;
+    }
+    sl_sleeptimer_stop_timer(&tetris_timer);
+    sl_sleeptimer_start_periodic_timer_ms(&tetris_timer,
+                                          new_speed,
+                                          tetris_timer_callback,
+                                          NULL,
+                                          0,
+                                          0);
+  }
+}
+
 static void clear_lines(void)
 {
+    int num_cleared_lines = 0;
     for (int y = BOARD_HEIGHT - 1; y >= 0; y--) {
         bool line_full = true;
         for (int x = 0; x < BOARD_WIDTH; x++) {
@@ -210,6 +281,7 @@ static void clear_lines(void)
         }
 
         if (line_full) {
+            num_cleared_lines++;
             for (int k = y; k > 0; k--) {
                 for (int x = 0; x < BOARD_WIDTH; x++) {
                     board[x][k] = board[x][k - 1];
@@ -220,5 +292,23 @@ static void clear_lines(void)
             }
             y++; // Check the same line again
         }
+    }
+    if (num_cleared_lines > 0) {
+      lines_cleared += num_cleared_lines;
+      switch (num_cleared_lines) {
+        case 1:
+          score += 100 * level;
+          break;
+        case 2:
+          score += 300 * level;
+          break;
+        case 3:
+          score += 500 * level;
+          break;
+        case 4:
+          score += 800 * level;
+          break;
+      }
+      update_level_and_speed();
     }
 }
