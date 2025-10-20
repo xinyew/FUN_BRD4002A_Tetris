@@ -1,6 +1,8 @@
 #include "app.h"
+#include "em_chip.h"
 #include "tetris.h"
 #include "main_menu.h"
+
 #include "game_state.h"
 
 #include "sl_simple_button_instances.h"
@@ -18,6 +20,7 @@ static sl_joystick_t sl_joystick_handle = JOYSTICK_HANDLE_DEFAULT;
 
 void app_init(void)
 {
+  CHIP_Init();
   uint32_t status;
 
   // Enable the memory lcd
@@ -35,6 +38,7 @@ void app_init(void)
   // Initialize game modules
   tetris_init();
   main_menu_init();
+  slot_menu_init();
 }
 
 // This is called on every iteration of the main while loop
@@ -60,6 +64,8 @@ void app_process_action(void)
       case JOYSTICK_N: tetris_rotate(); break;
       default: break;
     }
+  } else if (current_state == GAME_STATE_SLOT_SELECTION) {
+    slot_menu_handle_input(pos, NULL);
   }
 
   // --- Handle Drawing ---
@@ -69,6 +75,8 @@ void app_process_action(void)
     main_menu_draw();
   } else if (current_state == GAME_STATE_PAUSED) {
     tetris_draw_board();
+  } else if (current_state == GAME_STATE_SLOT_SELECTION) {
+    slot_menu_draw();
   }
   // For IN_GAME and GAME_OVER, drawing is handled by tetris_update and its call to tetris_draw_board
 }
@@ -95,6 +103,8 @@ void sl_button_on_change(const sl_button_t *handle)
       if (handle == &sl_button_btn1) {
         tetris_resume_game();
       }
+  } else if (current_state == GAME_STATE_SLOT_SELECTION) {
+      slot_menu_handle_input(JOYSTICK_NONE, handle);
   } else if (current_state == GAME_STATE_GAME_OVER) {
     if (handle == &sl_button_btn1) { // BTN1 is "Start"
       tetris_set_game_state(GAME_STATE_MAIN_MENU);

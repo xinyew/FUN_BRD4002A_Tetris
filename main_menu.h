@@ -9,4 +9,8 @@ void main_menu_draw(void);
 void main_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button_t *button_handle);
 int main_menu_get_start_level(void);
 
+void slot_menu_init(void);
+void slot_menu_draw(void);
+void slot_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button_t *button_handle);
+
 #endif // MAIN_MENU_H

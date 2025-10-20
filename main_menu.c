@@ -1,6 +1,7 @@
 #include "main_menu.h"
 #include "tetris.h"
 #include "glib.h"
+#include "sl_simple_button_instances.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -102,7 +103,7 @@ void main_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button
     if (selected_option == 0) { // Start Game
       tetris_start_new_game(start_level);
     } else if (selected_option == 2) { // Load Game
-      tetris_load_game();
+      tetris_set_game_state(GAME_STATE_SLOT_SELECTION);
     }
   }
 
@@ -173,4 +174,65 @@ static void draw_background_blocks(GLIB_Context_t *pGlib)
         };
         GLIB_drawRectFilled(pGlib, &rect);
     }
+}
+
+
+// --- Slot Menu ---
+
+static int selected_slot = 0;
+
+void slot_menu_init(void)
+{
+  selected_slot = 0;
+}
+
+void slot_menu_draw(void)
+{
+  GLIB_Context_t *pGlib = tetris_get_glib_context();
+  GLIB_clear(pGlib);
+
+  // Title
+  char* title_text = "Load Game";
+  int text_x = (pGlib->pDisplayGeometry->xSize - (strlen(title_text) * 6)) / 2;
+  GLIB_drawString(pGlib, title_text, strlen(title_text), text_x, 10, 0);
+
+  // Draw slots
+  for (int i = 0; i < 5; i++) {
+    int option_y = 30 + (i * 15);
+    char slot_name[32];
+    tetris_get_slot_name(i, slot_name, sizeof(slot_name));
+
+    if (i == selected_slot) {
+      GLIB_drawString(pGlib, ">", 1, 10, option_y, 0);
+    }
+    GLIB_drawString(pGlib, slot_name, strlen(slot_name), 20, option_y, 0);
+  }
+
+  // Button hints
+  char* hint_text = "BTN1: BACK BTN0:DELETE";
+  text_x = (pGlib->pDisplayGeometry->xSize - (strlen(hint_text) * 6)) / 2;
+  GLIB_drawString(pGlib, hint_text, strlen(hint_text), text_x, 110, 0);
+
+  DMD_updateDisplay();
+}
+
+void slot_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button_t *button_handle)
+{
+  if (joystick_pos == JOYSTICK_S) { // Down
+    selected_slot = (selected_slot + 1) % 5;
+  } else if (joystick_pos == JOYSTICK_N) { // Up
+    selected_slot = (selected_slot - 1 + 5) % 5;
+  }
+
+  if (joystick_pos == JOYSTICK_C) { // Center click to load
+    tetris_load_from_slot(selected_slot);
+  }
+
+  if (button_handle == &sl_button_btn1) { // Back to main menu
+    tetris_set_game_state(GAME_STATE_MAIN_MENU);
+  }
+
+  if (button_handle == &sl_button_btn0) { // Delete slot
+    tetris_delete_slot(selected_slot);
+  }
 }
