@@ -75,9 +75,15 @@ void main_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button
 
   if (selected_option == 1) { // Adjust Level
     if (joystick_pos == JOYSTICK_E) { // Right
-      if (start_level < 10) start_level++;
+      start_level++;
+      if (start_level > 10) {
+        start_level = 1;
+      }
     } else if (joystick_pos == JOYSTICK_W) { // Left
-      if (start_level > 1) start_level--;
+      start_level--;
+      if (start_level < 1) {
+        start_level = 10;
+      }
     }
   }
 
