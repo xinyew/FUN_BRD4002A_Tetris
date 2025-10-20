@@ -23,19 +23,19 @@ static sl_sleeptimer_timer_handle_t tetris_timer;
 
 static const Tetromino tetrominoes[] = {
     // I
-    { { {0, 1}, {1, 1}, {2, 1}, {3, 1} }, 1 },
+    { { {-1, 0}, {0, 0}, {1, 0}, {2, 0} }, 1 },
     // O
-    { { {1, 0}, {2, 0}, {1, 1}, {2, 1} }, 2 },
+    { { {0, 0}, {1, 0}, {0, 1}, {1, 1} }, 2 },
     // T
-    { { {1, 0}, {0, 1}, {1, 1}, {2, 1} }, 3 },
+    { { {-1, 0}, {0, 0}, {1, 0}, {0, 1} }, 3 },
     // L
-    { { {2, 0}, {0, 1}, {1, 1}, {2, 1} }, 4 },
+    { { {1, -1}, {-1, 0}, {0, 0}, {1, 0} }, 4 },
     // J
-    { { {0, 0}, {0, 1}, {1, 1}, {2, 1} }, 5 },
+    { { {-1, -1}, {-1, 0}, {0, 0}, {1, 0} }, 5 },
     // S
-    { { {1, 0}, {2, 0}, {0, 1}, {1, 1} }, 6 },
+    { { {0, 0}, {1, 0}, {-1, 1}, {0, 1} }, 6 },
     // Z
-    { { {0, 0}, {1, 0}, {1, 1}, {2, 1} }, 7 }
+    { { {-1, 0}, {0, 0}, {0, 1}, {1, 1} }, 7 }
 };
 
 static void tetris_timer_callback(sl_sleeptimer_timer_handle_t *handle, void *data);
@@ -114,15 +114,25 @@ void tetris_move_right(void)
     tetris_draw_board();
 }
 
+void tetris_move_down(void)
+{
+  if (game_over) return;
+  tetris_update();
+}
+
 void tetris_rotate(void)
 {
-    if (game_over) return;
+    if (game_over || current_tetromino.color == 2) { // Do not rotate 'O' piece
+      return;
+    }
+
     Tetromino rotated = current_tetromino;
     for (int i = 0; i < 4; i++) {
         int x = rotated.blocks[i].x;
-        rotated.blocks[i].x = 1 - rotated.blocks[i].y;
+        rotated.blocks[i].x = -rotated.blocks[i].y;
         rotated.blocks[i].y = x;
     }
+
     if (!check_collision(current_position, rotated)) {
         current_tetromino = rotated;
     }

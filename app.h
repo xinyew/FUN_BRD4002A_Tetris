@@ -22,6 +22,7 @@
  * Initialize application.
  ******************************************************************************/
 void app_init(void);
+void app_poll_joystick(void);
 
 
 

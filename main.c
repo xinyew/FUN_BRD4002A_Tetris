@@ -36,6 +36,7 @@
 #include "sl_main_kernel.h"
 #else // SL_CATALOG_KERNEL_PRESENT
 #include "sl_main_process_action.h"
+#include "app.h"
 #endif // SL_CATALOG_KERNEL_PRESENT
 
 int main(void)
@@ -58,6 +59,9 @@ int main(void)
     // Silicon Labs components process action routine
     // must be called from the super loop.
     sl_main_process_action();
+
+    // Poll the joystick
+    app_poll_joystick();
 
 
 
