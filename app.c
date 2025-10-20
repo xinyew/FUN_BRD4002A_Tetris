@@ -62,6 +62,7 @@ void app_process_action(void)
       case JOYSTICK_E: tetris_move_right(); break;
       case JOYSTICK_S: tetris_move_down(); break;
       case JOYSTICK_N: tetris_rotate(); break;
+      case JOYSTICK_C: tetris_hard_drop(); break;
       default: break;
     }
   } else if (current_state == GAME_STATE_SLOT_SELECTION) {

@@ -21,6 +21,7 @@ static Point current_position;
 static int lines_cleared;
 static int level;
 static int score;
+static bool last_move_was_rotation = false;
 
 // Timer
 static sl_sleeptimer_timer_handle_t tetris_timer;
@@ -66,7 +67,7 @@ static Tetromino get_random_tetromino(void);
 static void spawn_new_tetromino(void);
 static bool check_collision(Point pos, Tetromino tet);
 static void merge_tetromino(void);
-static void clear_lines(void);
+static void clear_lines(bool is_t_spin);
 static void tetris_set_game_speed(void);
 
 static const Tetromino tetrominoes[] = {
@@ -276,8 +277,21 @@ void tetris_update(void)
     next_pos.y++;
 
     if (check_collision(next_pos, current_tetromino)) {
+        bool is_t_spin = false;
+        if (current_tetromino.color == 3 && last_move_was_rotation) {
+            // Check for 3 corners occupied for T-spin
+            int corners = 0;
+            if (current_position.x > 0 && current_position.y > 0 && board[current_position.x - 1][current_position.y - 1]) corners++;
+            if (current_position.x < BOARD_WIDTH - 1 && current_position.y > 0 && board[current_position.x + 1][current_position.y - 1]) corners++;
+            if (current_position.x > 0 && current_position.y < BOARD_HEIGHT - 1 && board[current_position.x - 1][current_position.y + 1]) corners++;
+            if (current_position.x < BOARD_WIDTH - 1 && current_position.y < BOARD_HEIGHT - 1 && board[current_position.x + 1][current_position.y + 1]) corners++;
+            if (corners >= 3) {
+                is_t_spin = true;
+            }
+        }
+
         merge_tetromino();
-        clear_lines();
+        clear_lines(is_t_spin);
         spawn_new_tetromino();
         if (check_collision(current_position, current_tetromino)) {
             sl_sleeptimer_stop_timer(&tetris_timer);
@@ -289,6 +303,7 @@ void tetris_update(void)
     } else {
         current_position = next_pos;
     }
+    last_move_was_rotation = false;
     tetris_draw_board();
 }
 
@@ -423,6 +438,7 @@ void tetris_move_left(void)
     if (!check_collision(next_pos, current_tetromino)) {
         current_position = next_pos;
     }
+    last_move_was_rotation = false;
     tetris_draw_board();
 }
 
@@ -434,6 +450,7 @@ void tetris_move_right(void)
     if (!check_collision(next_pos, current_tetromino)) {
         current_position = next_pos;
     }
+    last_move_was_rotation = false;
     tetris_draw_board();
 }
 
@@ -441,6 +458,7 @@ void tetris_move_down(void)
 {
   if (current_game_state != GAME_STATE_IN_GAME) return;
   tetris_update();
+  last_move_was_rotation = false;
 }
 
 void tetris_rotate(void)
@@ -458,6 +476,34 @@ void tetris_rotate(void)
 
     if (!check_collision(current_position, rotated)) {
         current_tetromino = rotated;
+        last_move_was_rotation = true;
+    }
+    tetris_draw_board();
+}
+
+void tetris_hard_drop(void)
+{
+    if (current_game_state != GAME_STATE_IN_GAME) return;
+
+    Point next_pos = current_position;
+    int lines_dropped = 0;
+    while (!check_collision(next_pos, current_tetromino)) {
+        current_position = next_pos;
+        next_pos.y++;
+        lines_dropped++;
+    }
+
+    score += lines_dropped * 2;
+
+    merge_tetromino();
+    clear_lines(false);
+    spawn_new_tetromino();
+    if (check_collision(current_position, current_tetromino)) {
+        sl_sleeptimer_stop_timer(&tetris_timer);
+        if (tetris_is_high_score(score)) {
+            tetris_add_high_score(score);
+        }
+        current_game_state = GAME_STATE_GAME_OVER;
     }
     tetris_draw_board();
 }
@@ -617,7 +663,7 @@ static void tetris_set_game_speed(void)
                                         0);
 }
 
-static void clear_lines(void)
+static void clear_lines(bool is_t_spin)
 {
     int num_cleared_lines = 0;
     for (int y = BOARD_HEIGHT - 1; y >= 0; y--) {
@@ -643,25 +689,27 @@ static void clear_lines(void)
         }
     }
     if (num_cleared_lines > 0) {
-      lines_cleared += num_cleared_lines;
-      switch (num_cleared_lines) {
-        case 1:
-          score += 100 * level;
-          break;
-        case 2:
-          score += 300 * level;
-          break;
-        case 3:
-          score += 500 * level;
-          break;
-        case 4:
-          score += 800 * level;
-          break;
-      }
-      int new_level = (lines_cleared / 10) + 1;
-      if (new_level > level) {
-        level = new_level;
-        tetris_set_game_speed();
-      }
+        lines_cleared += num_cleared_lines;
+        if (is_t_spin) {
+            switch (num_cleared_lines) {
+                case 1: score += 800 * level; break; // T-Spin Single
+                case 2: score += 1200 * level; break; // T-Spin Double
+                case 3: score += 1600 * level; break; // T-Spin Triple
+            }
+        } else {
+            switch (num_cleared_lines) {
+                case 1: score += 100 * level; break;
+                case 2: score += 300 * level; break;
+                case 3: score += 500 * level; break;
+                case 4: score += 800 * level; break;
+            }
+        }
+        int new_level = (lines_cleared / 10) + 1;
+        if (new_level > level) {
+            level = new_level;
+            tetris_set_game_speed();
+        }
+    } else if (is_t_spin) {
+        score += 400 * level; // T-Spin Mini
     }
 }
