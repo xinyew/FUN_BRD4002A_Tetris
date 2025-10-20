@@ -313,27 +313,26 @@ void tetris_draw_board(void)
   snprintf(text_buffer, sizeof(text_buffer), "%d", score);
   GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 20, 0);
 
-  // Lines
-  GLIB_drawString(&glibContext, "Lines", 5, right_panel_x, 40, 0);
-  snprintf(text_buffer, sizeof(text_buffer), "%d", lines_cleared);
+  // Level
+  GLIB_drawString(&glibContext, "Level", 5, right_panel_x, 40, 0);
+  snprintf(text_buffer, sizeof(text_buffer), "%d", level);
   GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 50, 0);
 
-  // Level
-  GLIB_drawString(&glibContext, "Level", 5, right_panel_x, 70, 0);
-  snprintf(text_buffer, sizeof(text_buffer), "%d", level);
-  GLIB_drawString(&glibContext, text_buffer, strlen(text_buffer), right_panel_x, 80, 0);
-
   // Next Piece
-  GLIB_drawString(&glibContext, "Next", 4, right_panel_x, 100, 0);
+  GLIB_drawString(&glibContext, "Next", 4, right_panel_x, 70, 0);
   for (int i = 0; i < 4; i++) {
       int x = right_panel_x + 10 + (next_tetromino.blocks[i].x * BLOCK_SIZE);
-      int y = 110 + (next_tetromino.blocks[i].y * BLOCK_SIZE);
+      int y = 80 + (next_tetromino.blocks[i].y * BLOCK_SIZE);
       rect.xMin = x;
       rect.yMin = y;
       rect.xMax = x + BLOCK_SIZE - 1;
       rect.yMax = y + BLOCK_SIZE - 1;
       GLIB_drawRectFilled(&glibContext, &rect);
   }
+
+  // Button Hints
+  GLIB_drawString(&glibContext, "BTN1:PAUSE", 10, right_panel_x, 110, 0);
+  GLIB_drawString(&glibContext, "BTN0:SAVE", 9, right_panel_x, 120, 0);
 
   if (current_game_state == GAME_STATE_PAUSED) {
       char* paused_text = "PAUSED";
