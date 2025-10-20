@@ -66,6 +66,8 @@ void app_process_action(void)
   // and on demand for the menu.
   if (current_state == GAME_STATE_MAIN_MENU) {
     main_menu_draw();
+  } else if (current_state == GAME_STATE_PAUSED) {
+    tetris_draw_board();
   }
   // For IN_GAME and GAME_OVER, drawing is handled by tetris_update and its call to tetris_draw_board
 }
@@ -81,10 +83,17 @@ void sl_button_on_change(const sl_button_t *handle)
   if (current_state == GAME_STATE_MAIN_MENU) {
     // Pass button presses to menu handler
     main_menu_handle_input(JOYSTICK_NONE, handle);
+  } else if (current_state == GAME_STATE_IN_GAME) {
+      if (handle == &sl_button_btn1) {
+        tetris_pause_game();
+      }
+  } else if (current_state == GAME_STATE_PAUSED) {
+      if (handle == &sl_button_btn1) {
+        tetris_resume_game();
+      }
   } else if (current_state == GAME_STATE_GAME_OVER) {
     if (handle == &sl_button_btn1) { // BTN1 is "Start"
       tetris_set_game_state(GAME_STATE_MAIN_MENU);
     }
   }
-  // In-game button logic can be added here if desired
 }

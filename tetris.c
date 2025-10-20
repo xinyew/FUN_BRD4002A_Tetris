@@ -74,6 +74,22 @@ void tetris_init(void)
   
     current_game_state = GAME_STATE_IN_GAME;
   }
+
+  void tetris_pause_game(void)
+  {
+    if (current_game_state == GAME_STATE_IN_GAME) {
+      sl_sleeptimer_stop_timer(&tetris_timer);
+      tetris_set_game_state(GAME_STATE_PAUSED);
+    }
+  }
+
+  void tetris_resume_game(void)
+  {
+    if (current_game_state == GAME_STATE_PAUSED) {
+      tetris_set_game_state(GAME_STATE_IN_GAME);
+      tetris_set_game_speed(); // This will restart the timer
+    }
+  }
   
   void tetris_update(void)
   {
@@ -177,6 +193,16 @@ void tetris_init(void)
         rect.xMax = x + BLOCK_SIZE - 1;
         rect.yMax = y + BLOCK_SIZE - 1;
         GLIB_drawRectFilled(&glibContext, &rect);
+    }
+
+    if (current_game_state == GAME_STATE_PAUSED) {
+        char* paused_text = "PAUSED";
+        int text_x = (glibContext.pDisplayGeometry->xSize - (strlen(paused_text) * 6)) / 2;
+        GLIB_drawString(&glibContext, paused_text, strlen(paused_text), text_x, 40, 0);
+
+        char* resume_text = "Press BTN1 to resume";
+        text_x = (glibContext.pDisplayGeometry->xSize - (strlen(resume_text) * 6)) / 2;
+        GLIB_drawString(&glibContext, resume_text, strlen(resume_text), text_x, 60, 0);
     }
 
     DMD_updateDisplay();
