@@ -48,9 +48,9 @@ void sl_button_on_change(const sl_button_t *handle)
 {
   if (sl_button_get_state(handle) == SL_SIMPLE_BUTTON_PRESSED) {
     if (&BUTTON_INSTANCE_0 == handle) {
-      tetris_move_left();
-    } else if (&BUTTON_INSTANCE_1 == handle) {
       tetris_move_right();
+    } else if (&BUTTON_INSTANCE_1 == handle) {
+      tetris_move_left();
     }
   }
 }
