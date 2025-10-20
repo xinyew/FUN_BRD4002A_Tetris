@@ -75,7 +75,7 @@ void app_poll_joystick(void)
     case JOYSTICK_S:
       tetris_move_down();
       break;
-    case JOYSTICK_C:
+    case JOYSTICK_N:
       tetris_rotate();
       break;
     default:
