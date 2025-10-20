@@ -9,8 +9,8 @@
 static int selected_option = 0;
 static int start_level = 1;
 
-static const char* menu_options_no_load[] = {"Start Game", "Adjust Level"};
-static const char* menu_options_with_load[] = {"Start Game", "Adjust Level", "Load Game"};
+static const char* menu_options_no_load[] = {"Start Game", "Adjust Level", "Scoreboard"};
+static const char* menu_options_with_load[] = {"Start Game", "Adjust Level", "Load Game", "Scoreboard"};
 static const char** menu_options;
 static int num_menu_options;
 
@@ -27,10 +27,10 @@ void main_menu_init(void)
   start_level = 1;
   if (tetris_has_saved_game()) {
     menu_options = menu_options_with_load;
-    num_menu_options = 3;
+    num_menu_options = 4;
   } else {
     menu_options = menu_options_no_load;
-    num_menu_options = 2;
+    num_menu_options = 3;
   }
 }
 
@@ -49,7 +49,7 @@ void main_menu_draw(void)
   draw_title(pGlib);
 
   // 2. Draw a semi-transparent overlay for the menu options
-  GLIB_Rectangle_t rect = { .xMin = 10, .yMin = 55, .xMax = 118, .yMax = 110 };
+  GLIB_Rectangle_t rect = { .xMin = 10, .yMin = 55, .xMax = 118, .yMax = 125 };
   pGlib->foregroundColor = White;
   GLIB_drawRectFilled(pGlib, &rect);
   pGlib->foregroundColor = Black;
@@ -102,8 +102,10 @@ void main_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button
   if (joystick_pos == JOYSTICK_C) { // Center click
     if (selected_option == 0) { // Start Game
       tetris_start_new_game(start_level);
-    } else if (selected_option == 2) { // Load Game
+    } else if (strcmp(menu_options[selected_option], "Load Game") == 0) {
       tetris_set_game_state(GAME_STATE_SLOT_SELECTION);
+    } else if (strcmp(menu_options[selected_option], "Scoreboard") == 0) {
+        tetris_set_game_state(GAME_STATE_SCOREBOARD);
     }
   }
 
@@ -235,4 +237,42 @@ void slot_menu_handle_input(sl_joystick_position_t joystick_pos, const sl_button
   if (button_handle == &sl_button_btn0) { // Delete slot
     tetris_delete_slot(selected_slot);
   }
+}
+
+// --- Scoreboard ---
+
+void scoreboard_draw(void)
+{
+    GLIB_Context_t *pGlib = tetris_get_glib_context();
+    GLIB_clear(pGlib);
+
+    // Title
+    char* title_text = "Scoreboard";
+    int text_x = (pGlib->pDisplayGeometry->xSize - (strlen(title_text) * 6)) / 2;
+    GLIB_drawString(pGlib, title_text, strlen(title_text), text_x, 10, 0);
+
+    // Draw scores
+    uint32_t high_scores[5];
+    tetris_get_high_scores(high_scores);
+    for (int i = 0; i < 5; i++) {
+        int option_y = 30 + (i * 15);
+        char score_buffer[16];
+        snprintf(score_buffer, sizeof(score_buffer), "%d. %lu", i + 1, high_scores[i]);
+        GLIB_drawString(pGlib, score_buffer, strlen(score_buffer), 20, option_y, 0);
+    }
+
+    // Button hints
+    char* hint_text = "BTN1: BACK";
+    text_x = (pGlib->pDisplayGeometry->xSize - (strlen(hint_text) * 6)) / 2;
+    GLIB_drawString(pGlib, hint_text, strlen(hint_text), text_x, 110, 0);
+
+    DMD_updateDisplay();
+}
+
+void scoreboard_handle_input(sl_joystick_position_t joystick_pos, const sl_button_t *button_handle)
+{
+    (void)joystick_pos;
+    if (button_handle == &sl_button_btn1) { // Back to main menu
+        tetris_set_game_state(GAME_STATE_MAIN_MENU);
+    }
 }

@@ -31,6 +31,7 @@ static sl_sleeptimer_timer_handle_t save_msg_timer;
 #define SLOT_META_KEY_BASE 10
 #define SLOT_DATA_KEY_BASE 100
 #define SAVE_COUNTER_KEY 200
+#define HIGH_SCORES_KEY 300
 
 #define BOARD_CHUNK_SIZE (BOARD_WIDTH * BOARD_HEIGHT / 6)
 
@@ -41,6 +42,7 @@ typedef struct {
 } game_slot_t;
 
 static game_slot_t slots[NUM_SLOTS];
+static uint32_t high_scores[5];
 
 static bool display_save_message = false;
 static bool display_save_failed_message = false;
@@ -94,9 +96,10 @@ void tetris_init(void)
   GLIB_setFont(&glibContext, (GLIB_Font_t *) &GLIB_FontNarrow6x8);
   current_game_state = GAME_STATE_MAIN_MENU;
 
-  // Init NVM3 and read slots
+  // Init NVM3 and read data
   Ecode_t err = nvm3_initDefault();
   if (err == ECODE_NVM3_OK) {
+    // Read slots
     for (int i = 0; i < NUM_SLOTS; i++) {
       err = nvm3_readData(nvm3_defaultHandle, SLOT_META_KEY_BASE + i, &slots[i], sizeof(game_slot_t));
       if (err != ECODE_NVM3_OK) {
@@ -108,7 +111,13 @@ void tetris_init(void)
     size_t len;
     err = nvm3_getObjectInfo(nvm3_defaultHandle, SAVE_COUNTER_KEY, &type, &len);
     if (err != ECODE_NVM3_OK) {
-        nvm3_writeData(nvm3_defaultHandle, SAVE_COUNTER_KEY, "\0\0\0\0", 4);
+        uint32_t counter = 0;
+        nvm3_writeData(nvm3_defaultHandle, SAVE_COUNTER_KEY, &counter, sizeof(counter));
+    }
+    // Read high scores
+    err = nvm3_readData(nvm3_defaultHandle, HIGH_SCORES_KEY, high_scores, sizeof(high_scores));
+    if (err != ECODE_NVM3_OK) {
+        memset(high_scores, 0, sizeof(high_scores));
     }
 
   } else {
@@ -116,6 +125,7 @@ void tetris_init(void)
     for (int i = 0; i < NUM_SLOTS; i++) {
       slots[i].is_occupied = false;
     }
+    memset(high_scores, 0, sizeof(high_scores));
   }
 }
 
@@ -231,6 +241,31 @@ bool tetris_has_saved_game(void)
   return false;
 }
 
+void tetris_get_high_scores(uint32_t scores[5])
+{
+    memcpy(scores, high_scores, sizeof(high_scores));
+}
+
+void tetris_add_high_score(uint32_t score)
+{
+    int i, j;
+    for (i = 0; i < 5; i++) {
+        if (score > high_scores[i]) {
+            for (j = 4; j > i; j--) {
+                high_scores[j] = high_scores[j - 1];
+            }
+            high_scores[i] = score;
+            break;
+        }
+    }
+    nvm3_writeData(nvm3_defaultHandle, HIGH_SCORES_KEY, high_scores, sizeof(high_scores));
+}
+
+bool tetris_is_high_score(uint32_t score)
+{
+    return score > high_scores[4];
+}
+
 void tetris_update(void)
 {
     if (current_game_state != GAME_STATE_IN_GAME) {
@@ -246,6 +281,9 @@ void tetris_update(void)
         spawn_new_tetromino();
         if (check_collision(current_position, current_tetromino)) {
             sl_sleeptimer_stop_timer(&tetris_timer);
+            if (tetris_is_high_score(score)) {
+                tetris_add_high_score(score);
+            }
             current_game_state = GAME_STATE_GAME_OVER;
         }
     } else {
@@ -515,7 +553,7 @@ static void tetris_save_to_slot(int slot_index)
     slots[slot_index].is_occupied = true;
     slots[slot_index].timestamp = save_counter++;
     nvm3_writeData(nvm3_defaultHandle, SAVE_COUNTER_KEY, &save_counter, sizeof(save_counter));
-    snprintf(slots[slot_index].name, sizeof(slots[slot_index].name), "Save %lu", slots[slot_index].timestamp);
+    snprintf(slots[slot_index].name, sizeof(slots[slot_index].name), "Slot %d: %d", slot_index + 1, score);
     nvm3_writeData(nvm3_defaultHandle, SLOT_META_KEY_BASE + slot_index, &slots[slot_index], sizeof(game_slot_t));
 
     display_save_message = true;

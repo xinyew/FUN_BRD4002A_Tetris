@@ -38,6 +38,10 @@ void tetris_load_from_slot(int slot_index);
 void tetris_delete_slot(int slot_index);
 void tetris_get_slot_name(int slot_index, char* buffer, size_t buffer_size);
 bool tetris_has_saved_game(void);
+
+void tetris_get_high_scores(uint32_t scores[5]);
+void tetris_add_high_score(uint32_t score);
+bool tetris_is_high_score(uint32_t score);
 void tetris_process_action(void);
 GLIB_Context_t* tetris_get_glib_context(void);
 

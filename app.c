@@ -66,6 +66,8 @@ void app_process_action(void)
     }
   } else if (current_state == GAME_STATE_SLOT_SELECTION) {
     slot_menu_handle_input(pos, NULL);
+  } else if (current_state == GAME_STATE_SCOREBOARD) {
+    scoreboard_handle_input(pos, NULL);
   }
 
   // --- Handle Drawing ---
@@ -77,6 +79,8 @@ void app_process_action(void)
     tetris_draw_board();
   } else if (current_state == GAME_STATE_SLOT_SELECTION) {
     slot_menu_draw();
+  } else if (current_state == GAME_STATE_SCOREBOARD) {
+    scoreboard_draw();
   }
   // For IN_GAME and GAME_OVER, drawing is handled by tetris_update and its call to tetris_draw_board
 }
@@ -108,6 +112,8 @@ void sl_button_on_change(const sl_button_t *handle)
       }
   } else if (current_state == GAME_STATE_SLOT_SELECTION) {
       slot_menu_handle_input(JOYSTICK_NONE, handle);
+  } else if (current_state == GAME_STATE_SCOREBOARD) {
+      scoreboard_handle_input(JOYSTICK_NONE, handle);
   } else if (current_state == GAME_STATE_GAME_OVER) {
     if (handle == &sl_button_btn1) { // BTN1 is "Start"
       tetris_set_game_state(GAME_STATE_MAIN_MENU);
